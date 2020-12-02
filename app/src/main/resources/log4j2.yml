@@ -1,0 +1,29 @@
+Configuration:
+  packages: "com.amazonaws.services.lambda.runtime.log4j2.LambdaAppender"
+  Appenders:
+    Console:
+      name: STDOUT
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+    File:
+      name: File
+      fileName: build/climb.log
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+  Loggers:
+    logger:
+      - name: console
+        level: info
+        additivity: false
+        AppenderRef:
+          ref: STDOUT
+      - name: file
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: File
+    Root:
+      level: INFO
+      AppenderRef:
+        ref: STDOUT
