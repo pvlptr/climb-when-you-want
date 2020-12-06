@@ -39,7 +39,7 @@ public class Registrator {
     }
 
 
-    private final void login(String email, String password) {
+    private void login(String email, String password) {
         var loginResponse = post(URI.create(urlBase + "/bookings/customer/login"),
                 Map.of(
                         "email", email,
@@ -65,7 +65,8 @@ public class Registrator {
         var idReservation = regPage.select("input[name=idReservation]").attr("value");
 
         if (String.valueOf(idReservation).isEmpty()) {
-            throw new RuntimeException("Reservation ID is unknown");
+            var errorContent  = regPage.select(".c-message-indicator__content").text();
+            throw new RuntimeException("Reservation ID is unknown: " + errorContent);
         }
 
         // confirm booking
@@ -97,7 +98,7 @@ public class Registrator {
         return resultData != null;
     }
 
-    private final HttpResponse<String> post(URI uri, Map<String, String> data) {
+    private HttpResponse<String> post(URI uri, Map<String, String> data) {
 
         log.debug("uri: " + uri);
         log.debug("data: " + data);
@@ -109,7 +110,7 @@ public class Registrator {
 
         log.trace("Posting request: " + request);
 
-        HttpResponse<String> response = null;
+        HttpResponse<String> response;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (Exception e) {
@@ -128,7 +129,7 @@ public class Registrator {
 
     }
 
-    private final HttpRequest.BodyPublisher ofFormData(Map<String, String> data) {
+    private HttpRequest.BodyPublisher ofFormData(Map<String, String> data) {
         var builder = new StringBuilder();
         for (var entry : data.entrySet()) {
             if (builder.length() > 0) {
