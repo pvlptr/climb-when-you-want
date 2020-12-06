@@ -66,7 +66,7 @@ public class Registrator {
 
         if (String.valueOf(idReservation).isEmpty()) {
             var errorContent  = regPage.select(".c-message-indicator__content").text();
-            throw new RuntimeException("Reservation ID is unknown: " + errorContent);
+            throw new RuntimeException("Reservation could not be done: " + errorContent);
         }
 
         // confirm booking
